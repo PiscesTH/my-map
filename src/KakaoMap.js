@@ -3,7 +3,6 @@ import {
   Map,
   MapTypeControl,
   MapMarker,
-  CustomOverlayMap,
   ZoomControl,
 } from "react-kakao-maps-sdk";
 import { useState, useRef } from "react";
@@ -85,7 +84,9 @@ function KakaoMap(props) {
     },
   ];
 
-  const SetMapMaker = ( props ) => {
+  const [position, setPosition] = useState(positions);
+
+  const SetMapMaker = (props) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -114,7 +115,7 @@ function KakaoMap(props) {
             <div>날짜</div>
             <div style={{ padding: "5px", color: "#000" }}>
               <a href="https://www.naver.com/">{props.title}</a>
-              </div>
+            </div>
           </div>
         )}
       </MapMarker>
@@ -127,10 +128,20 @@ function KakaoMap(props) {
       style={{ width: "100%", height: "600px" }}
       level={3}
       ref={mapRef}
+      onClick={(_target, mouseEvent) => {
+        const latlng = mouseEvent.latLng;
+        setPosition([
+          ...positions,
+          {
+            title: "임시",
+            latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
+          },
+        ]);
+      }}
     >
       <ZoomControl />
       <MapTypeControl position={"TOPRIGHT"} />
-      {positions.map((value) => (
+      {position.map((value) => (
         <SetMapMaker
           key={`${value.title}-${value.latlng}`}
           position={value.latlng} // 마커를 표시할 위치
