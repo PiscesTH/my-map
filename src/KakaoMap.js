@@ -6,6 +6,7 @@ import {
   ZoomControl,
 } from "react-kakao-maps-sdk";
 import { useState, useRef } from "react";
+import { NavLink } from "react-router-dom";
 
 function KakaoMap(props) {
   const [coordinate, setCoordinate] = useState({
@@ -114,7 +115,7 @@ function KakaoMap(props) {
             />
             <div>날짜</div>
             <div style={{ padding: "5px", color: "#000" }}>
-              <a href="https://www.naver.com/">{props.title}</a>
+              <NavLink to="/location">{props.title}</NavLink>
             </div>
           </div>
         )}

@@ -1,4 +1,15 @@
-.map-container {
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  background-color: transparent;
+  display: inline-block;
+  color: black;
+}
+
+.container {
   width: 1000px;
   height: 1000px;
   background-color: aliceblue;
