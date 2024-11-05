@@ -115,7 +115,9 @@ function KakaoMap(props) {
             />
             <div>날짜</div>
             <div style={{ padding: "5px", color: "#000" }}>
-              <NavLink to="/location">{props.title}</NavLink>
+              {props.title === '등록하기' ? 
+              <NavLink to="/record">{props.title}</NavLink> :
+              <NavLink to="/location">{props.title}</NavLink> }
             </div>
           </div>
         )}
@@ -134,7 +136,7 @@ function KakaoMap(props) {
         setPosition([
           ...positions,
           {
-            title: "임시",
+            title: "등록하기",
             latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
           },
         ]);
