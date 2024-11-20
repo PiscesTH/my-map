@@ -163,6 +163,12 @@ function KakaoMap(props) {
     });
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(); // 엔터 키가 눌리면 검색 실행
+    }
+  };
+
   return (
     <>
       <div style={{ marginBottom: "10px" }}>
@@ -171,6 +177,7 @@ function KakaoMap(props) {
           placeholder="검색어를 입력하세요"
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
           style={{ width: "200px", marginRight: "10px" }}
         />
         <button onClick={searchPlaces}>검색</button>
