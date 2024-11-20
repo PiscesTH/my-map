@@ -115,9 +115,11 @@ function KakaoMap(props) {
             />
             <div>날짜</div>
             <div style={{ padding: "5px", color: "#000" }}>
-              {props.title === '등록하기' ? 
-              <NavLink to="/record">{props.title}</NavLink> :
-              <NavLink to="/location">{props.title}</NavLink> }
+              {props.title === "등록하기" ? (
+                <NavLink to="/record">{props.title}</NavLink>
+              ) : (
+                <NavLink to="/location">{props.title}</NavLink>
+              )}
             </div>
           </div>
         )}
@@ -125,52 +127,100 @@ function KakaoMap(props) {
     );
   };
 
-  return (
-    <Map
-      center={coordinate.center}
-      style={{ width: "100%", height: "600px" }}
-      level={3}
-      ref={mapRef}
-      onClick={(_target, mouseEvent) => {
-        const latlng = mouseEvent.latLng;
-        setPosition([
-          ...positions,
-          {
-            title: "등록하기",
-            latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
-          },
-        ]);
-      }}
-    >
-      <ZoomControl />
-      <MapTypeControl position={"TOPRIGHT"} />
-      {position.map((value) => (
-        <SetMapMaker
-          key={`${value.title}-${value.latlng}`}
-          position={value.latlng} // 마커를 표시할 위치
-          title={value.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        />
-      ))}
-      <button
-        onClick={() =>
+  const [searchKeyword, setSearchKeyword] = useState(""); // 검색 키워드 상태 추가
+  const searchPlaces = () => {
+    if (!searchKeyword.trim()) {
+      alert("검색어를 입력하세요!");
+      return;
+    }
+
+    const ps = new window.kakao.maps.services.Places();
+    ps.keywordSearch(searchKeyword, (data, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+/*         const newPositions = data.map((place) => ({
+          title: place.place_name,
+          latlng: { lat: parseFloat(place.y), lng: parseFloat(place.x) },
+        }));
+        const totalLat = newPositions.reduce((sum, pos) => sum + pos.latlng.lat, 0);
+        const totalLng = newPositions.reduce((sum, pos) => sum + pos.latlng.lng, 0);
+        const centerLat = totalLat / newPositions.length;
+        const centerLng = totalLng / newPositions.length; */
+        setCoordinate((prev) => ({
+          center: { lat: prev.center.lat + 0.00001, lng: prev.center.lng + 0.00001},
+          isPanto: true
+        }))
+
+        setTimeout(() => {
           setCoordinate({
-            center: { lat: 35.8735226465432, lng: 128.810197036642 },
-            isPanto: false,
-          })
-        }
-      >
-        지정된 좌표로 이동
-      </button>
-      <button id="getInfoBtn" onClick={getInfo}>
-        맵정보 가져오기
-      </button>
-      <p
-        id="info"
-        dangerouslySetInnerHTML={{
-          __html: info,
+            center: { lat: parseFloat(data[0].y), lng: parseFloat(data[0].x) },
+            isPanto: true,
+          });
+        }, 0);
+        
+      } else {
+        alert("검색 결과가 없습니다.");
+      }
+    });
+  };
+
+  return (
+    <>
+      <div style={{ marginBottom: "10px" }}>
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          style={{ width: "200px", marginRight: "10px" }}
+        />
+        <button onClick={searchPlaces}>검색</button>
+      </div>
+      <Map
+        center={coordinate.center}
+        style={{ width: "100%", height: "600px" }}
+        level={3}
+        ref={mapRef}
+        onClick={(_target, mouseEvent) => {
+          const latlng = mouseEvent.latLng;
+          setPosition([
+            ...positions,
+            {
+              title: "등록하기",
+              latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
+            },
+          ]);
         }}
-      />
-    </Map>
+      >
+        <ZoomControl />
+        <MapTypeControl position={"TOPRIGHT"} />
+        {position.map((value) => (
+          <SetMapMaker
+            key={`${value.title}-${value.latlng}`}
+            position={value.latlng} // 마커를 표시할 위치
+            title={value.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          />
+        ))}
+        <button
+          onClick={() =>
+            setCoordinate({
+              center: { lat: 35.8735226465432, lng: 128.810197036642 },
+              isPanto: false,
+            })
+          }
+        >
+          지정된 좌표로 이동
+        </button>
+        <button id="getInfoBtn" onClick={getInfo}>
+          맵정보 가져오기
+        </button>
+        <p
+          id="info"
+          dangerouslySetInnerHTML={{
+            __html: info,
+          }}
+        />
+      </Map>
+    </>
   );
 }
 
