@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 function Location(props) {
   return (
-    <div className="info-container">
+    <div className="location-container">
       <div className="info-header">
         <span className="title">카카오 스페이스닷원</span>
         <NavLink to={"/"}>X</NavLink>

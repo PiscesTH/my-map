@@ -15,12 +15,12 @@ a {
   background-color: aliceblue;
 }
 
-.info-container {
-  width: 300px;
+.location-container {
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .info-header {
@@ -69,3 +69,28 @@ a {
 .homepage-link:hover {
   text-decoration: underline;
 }
+
+.search {
+  margin-bottom: 10px;
+}
+
+#__react-kakao-maps-sdk___Map {
+  width: 100%;
+  height: 600px;
+  margin-top: 10px;
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.images {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin: 5px;
+}
+

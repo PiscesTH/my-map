@@ -171,20 +171,9 @@ function KakaoMap(props) {
 
   return (
     <>
-      <div style={{ marginBottom: "10px" }}>
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={{ width: "200px", marginRight: "10px" }}
-        />
-        <button onClick={searchPlaces}>검색</button>
-      </div>
       <Map
         center={coordinate.center}
-        style={{ width: "100%", height: "600px" }}
+        // style={{ width: "100%", height: "600px"}}
         level={3}
         ref={mapRef}
         onClick={(_target, mouseEvent) => {
@@ -227,6 +216,17 @@ function KakaoMap(props) {
           }}
         />
       </Map>
+      <div className="search">
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
+          style={{ width: "200px", marginRight: "10px" }}
+        />
+        <button onClick={searchPlaces}>검색</button>
+      </div>
     </>
   );
 }

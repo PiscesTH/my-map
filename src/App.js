@@ -2,11 +2,13 @@ import "./App.css";
 import ImageUploader from "./ImageUploader";
 import KakaoMap from "./KakaoMap";
 import Location from "./Location";
+import Header from "./Header";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <div className="container">
+      <Header></Header>
       <main>
         <Routes>
           <Route exact="true" path="/" element={<KakaoMap />}></Route>

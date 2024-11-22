@@ -46,13 +46,14 @@ function ImageUploader() {
       <h1>이미지 업로드</h1>
       <input type="file" multiple onChange={handleImageChange} />
       
-      <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
+      <div className="image-container">
         {previewUrls.map((url, index) => (
           <img
             key={index}
             src={url}
             alt={`preview-${index}`}
-            style={{ width: "150px", height: "150px", objectFit: "cover", margin: "5px" }}
+            className="images"
+            // style={{ width: "150px", height: "150px", objectFit: "cover", margin: "5px" }}
           />
         ))}
       </div>
