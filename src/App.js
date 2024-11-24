@@ -4,6 +4,7 @@ import KakaoMap from "./KakaoMap";
 import Location from "./Location";
 import Header from "./Header";
 import { Route, Routes } from "react-router-dom";
+import "react-calendar/dist/Calendar.css";
 
 function App() {
   return (

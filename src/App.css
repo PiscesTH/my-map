@@ -9,6 +9,10 @@ a {
   color: black;
 }
 
+input {
+  display: none;
+}
+
 .container {
   width: 1000px;
   height: 1000px;
@@ -87,10 +91,116 @@ a {
   margin-top: 20px;
 }
 
-.images {
+.thumbnails {
+  margin: 10px;
+  border: 1px solid #ccc;
   width: 150px;
   height: 150px;
   object-fit: cover;
-  margin: 5px;
 }
 
+.custom-file-label, .fileUpload {
+  display: inline-block;
+  padding: 8px 14px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid #ccc;
+  min-width: 130px;
+}
+
+.custom-file-label:hover {
+  background-color: #0056b3;
+}
+
+#fileUpload{
+  display: none;
+}
+
+/* calendar */
+.react-calendar {
+  width: 500px !important;
+  margin: 0 auto;
+  border: 2px solid #a3998d !important;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.react-calendar__navigation {
+  display: flex;
+  margin-bottom: 1em;
+  height: 44px !important; 
+  background: #faf8f3;
+  border-bottom: 4px solid #d392f1dc;
+  height: 90px;
+  border-radius: 20px 20px 0 0;
+}
+
+/* span {
+  font-size: 24px;
+  font-weight: 600;
+  color: #d392f1dc;
+} */
+
+.react-calendar__navigation button:disabled {
+  background-color: pink;
+  border-radius: 20px 20px 0 0;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: pink;
+  border-radius: 20px 20px 0 0;
+}
+
+.react-calendar__tile {
+  text-align: center;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+/*hover, focus, 선택됐을 시 */
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus,
+.react-calendar__tile--active {
+  background: blue ;
+  border-radius: 14px;
+}
+
+.react-calendar__tile--now {
+  background: lime;
+  border-radius: 14px;
+}
+/*hover, focus 시 */
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: blue;
+  border-radius: 14px;
+}
+
+/* input type = date 의 기본 달력 ui 삭제하기 */
+/* 크롬, 사파리, 엣지 등 웹킷 기반 브라우저 */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* 파이어폭스 */
+input[type="date"]::-moz-calendar-picker-indicator {
+  display: none;
+}
+
+/* 인터넷 익스플로러 */
+input[type="date"]::-ms-clear {
+  display: none;
+}
+
+/* 전체적으로 패딩 조절 필요 없을거같기도 하고? */
+/* input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+} */

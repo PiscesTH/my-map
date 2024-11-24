@@ -1,64 +1,115 @@
 import React, { useState } from "react";
+import MyCalendar from "./MyCalendar";
 
 function ImageUploader() {
-  // 파일과 미리보기 URL을 저장할 상태
   const [images, setImages] = useState([]);
-  const [previewUrls, setPreviewUrls] = useState([]);
+  const [thumbnails, setThumbnails] = useState([]);
 
-  // 파일 선택 시 처리 함수
-  const handleImageChange = (event) => {
-    const selectedFiles = Array.from(event.target.files); // 여러 파일을 배열로 변환
-    setImages(selectedFiles);
 
-    // 각 파일의 URL을 만들어 미리보기로 보여주기
-    const imageUrls = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviewUrls(imageUrls);
+  // 이미지 업로드 핸들러
+  const handleImageUpload = (event) => {
+    const files = Array.from(event.target.files);
+    setImages(files);
+
+    // 썸네일 생성
+    const thumbnailPromises = files.map((file) => createThumbnail(file));
+    Promise.all(thumbnailPromises).then(setThumbnails);
   };
 
-  // 파일 업로드 함수
+
+  // 썸네일 생성 함수
+  const createThumbnail = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          const maxWidth = 150; // 썸네일 너비
+          const maxHeight = 150; // 썸네일 높이
+          let width = img.width;
+          let height = img.height;
+
+          // 이미지 비율 유지
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // 썸네일 Blob 생성
+          canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.8);
+        };
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // 이미지와 썸네일 전송 함수
   const handleUpload = async () => {
     const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("images", image);
+    console.log("작동중");
+    images.forEach((image, index) => {
+      formData.append("originals", image); // 원본 이미지
+      formData.append("thumbnails", thumbnails[index]); // 썸네일
     });
 
     try {
-      // const response = await fetch("/api/upload", {
-      //   method: "POST",
-      //   body: formData,
-      // });
+      const response = await fetch("https://your-backend-api/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-      // if (response.ok) {
-      //   alert("업로드 성공!");
-      //   setImages([]);
-      //   setPreviewUrls([]);
-      // } else {
-      //   alert("업로드 실패");
-      // }
+      if (response.ok) {
+        console.log("이미지 업로드 성공!");
+      } else {
+        console.error("업로드 실패!");
+      }
     } catch (error) {
-      console.error("업로드 오류:", error);
-      alert("업로드 중 오류가 발생했습니다.");
+      console.error("오류 발생:", error);
     }
   };
 
   return (
     <div>
-      <h1>이미지 업로드</h1>
-      <input type="file" multiple onChange={handleImageChange} />
-      
-      <div className="image-container">
-        {previewUrls.map((url, index) => (
+      <h1>이미지 업로드 및 썸네일 생성</h1>
+      <input
+        type="file"
+        id="fileInput"
+        multiple
+        accept="image/*"
+        onChange={handleImageUpload}
+      />
+      <label for="fileInput" class="custom-file-label">사진 선택</label>
+      <button id="fileUpload" onClick={handleUpload}></button>
+      <label for="fileUpload" className="custom-file-label">이미지 업로드</label>
+
+      <div>
+        <h2>사진 미리보기</h2>
+        {thumbnails.map((thumbnail, index) => (
           <img
             key={index}
-            src={url}
-            alt={`preview-${index}`}
-            className="images"
-            // style={{ width: "150px", height: "150px", objectFit: "cover", margin: "5px" }}
+            src={URL.createObjectURL(thumbnail)}
+            alt={`Thumbnail ${index + 1}`}
+            className="thumbnails"
           />
         ))}
       </div>
-      
-      <button onClick={handleUpload}>업로드</button>
+      <MyCalendar></MyCalendar>
     </div>
   );
 }
