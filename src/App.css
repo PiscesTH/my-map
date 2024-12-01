@@ -204,3 +204,7 @@ input[type="date"]::-ms-clear {
   -moz-appearance: none;
   appearance: none;
 } */
+
+#calendar-switch {
+  display: none;
+}

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Calendar from "react-calendar";
 import moment from "moment";
 
-function MyCalendar() {
-    const [date, setDate] = useState(new Date());
+function MyCalendar(date, setDate) {
 
     const handleDateChange = (date) => {
         // Calendar에서 날짜 선택 시 호출되는 함수
