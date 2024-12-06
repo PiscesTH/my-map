@@ -7,6 +7,7 @@ import {
 } from "react-kakao-maps-sdk";
 import { useState, useRef } from "react";
 import { NavLink } from "react-router-dom";
+import Location from "./Location";
 
 function KakaoMap(props) {
   const [coordinate, setCoordinate] = useState({
@@ -15,6 +16,8 @@ function KakaoMap(props) {
     // 지도 위치 변경시 panto를 이용할지에 대해서 정의
     isPanto: false,
   });
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [recordOpen, setRecordOpen] = useState(false);
 
   const mapRef = useRef(null);
   const [info, setInfo] = useState("");
@@ -120,6 +123,11 @@ function KakaoMap(props) {
               ) : (
                 <NavLink to="/location">{props.title}</NavLink>
               )}
+              {/*               {props.title === "등록하기" ? (
+                <p onClick={setRecordOpen(true)}>{props.title}</p>
+              ) : (
+                <p onClick={setLocationOpen(true)}>{props.title}</p>
+              )} */}
             </div>
           </div>
         )}
@@ -137,7 +145,7 @@ function KakaoMap(props) {
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(searchKeyword, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
-/*         const newPositions = data.map((place) => ({
+        /*         const newPositions = data.map((place) => ({
           title: place.place_name,
           latlng: { lat: parseFloat(place.y), lng: parseFloat(place.x) },
         }));
@@ -146,9 +154,12 @@ function KakaoMap(props) {
         const centerLat = totalLat / newPositions.length;
         const centerLng = totalLng / newPositions.length; */
         setCoordinate((prev) => ({
-          center: { lat: prev.center.lat + 0.00001, lng: prev.center.lng + 0.00001},
-          isPanto: true
-        }))
+          center: {
+            lat: prev.center.lat + 0.00001,
+            lng: prev.center.lng + 0.00001,
+          },
+          isPanto: true,
+        }));
 
         setTimeout(() => {
           setCoordinate({
@@ -156,7 +167,6 @@ function KakaoMap(props) {
             isPanto: true,
           });
         }, 0);
-        
       } else {
         alert("검색 결과가 없습니다.");
       }

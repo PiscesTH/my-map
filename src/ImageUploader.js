@@ -5,11 +5,10 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function ImageUploader() {
-  const [images, setImages] = useState([]);
+  const [originals, setOriginals] = useState([]);
   const [thumbnails, setThumbnails] = useState([]);
   const [date, setDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({});
   const locationDto = {"title": "임시제목",
     "lat": 35.8735226465432, 
     "lng": 128.810197036642, 
@@ -18,30 +17,15 @@ function ImageUploader() {
   // 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-    console.log("Uploaded files:", files);
-    
-  
-    setImages(files);
+    setOriginals(files);
   
     const thumbnailPromises = files.map((file) => createThumbnail(file));
     Promise.all(thumbnailPromises)
       .then((thumbnails) => {
-        console.log("Generated Thumbnails:", thumbnails);
         setThumbnails(thumbnails);
       })
       .catch((err) => console.error("Error generating thumbnails:", err));
   };
-  
-  useEffect(() => {
-    console.log("Updated Thumbnails State:", thumbnails);
-
-    setFormData({
-      "dto": new Blob([JSON.stringify(locationDto)], { type: "application/json" }),
-      'originals': images,
-      'thumbnails': thumbnails
-    });
-    console.log("formData", formData);
-  }, [thumbnails]);
 
   // 썸네일 생성 함수
   const createThumbnail = (file) => {
@@ -98,12 +82,24 @@ function ImageUploader() {
   // 이미지와 썸네일 전송 함수
   const handleUpload = async () => {
     try {
-      console.log(formData);
-      axios.post("http://localhost:8080/api/record", formData, {
+      const formData = new FormData();
+      formData.append("dto", new Blob([JSON.stringify(locationDto)], { type: "application/json" }));
+    // originals 배열의 각 파일을 개별적으로 추가
+    originals.forEach((original, index) => {
+      formData.append(`originals`, original);
+    });
+
+    // thumbnails 배열의 각 파일을 개별적으로 추가
+    thumbnails.forEach((thumbnail, index) => {
+      formData.append(`thumbnails`, thumbnail);
+    });
+
+      const response = axios.post("http://localhost:8080/api/location", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
+      console.log(response.data);
     } catch (error) {
       console.error("오류 발생:", error);
     }
