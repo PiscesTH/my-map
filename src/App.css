@@ -20,6 +20,7 @@ input {
 }
 
 .location-container {
+  position: relative;
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -225,7 +226,7 @@ input[type="date"]::-ms-clear {
 
 .modal-content {
   position: relative;
-  background: #fff;
+  background: aliceblue;
   padding: 10px;
   border-radius: 8px;
   max-width: 800px;
@@ -233,13 +234,20 @@ input[type="date"]::-ms-clear {
   overflow: scroll;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.modal-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
 .close-button {
   position: absolute;
   top: 10px;
-  right: 15px;
+  right: 18px;
   font-size: 24px;
   font-weight: bold;
   color: #333;
@@ -247,6 +255,28 @@ input[type="date"]::-ms-clear {
   z-index: 1001;
 }
 
-.close-button:hover {
+.delete-button {
+  padding: 3px 0;
+  position: absolute;
+  top: 42px;
+  right: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.hover-red:hover {
   color: red;
+}
+
+
+.return-button {
+  padding: 3px;
+  font-size: 27px;
+  position: absolute;
+  top: 5%;
+  right: 3%;
+  z-index: 3;
 }
