@@ -3,15 +3,20 @@ import Calendar from "react-calendar";
 import moment from "moment";
 import { useEffect } from "react";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ImageUploader() {
   const [originals, setOriginals] = useState([]);
   const [thumbnails, setThumbnails] = useState([]);
   const [date, setDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+
+  const location = useLocation();
+  const receivedState = location.state;
+
   const locationDto = {"title": "임시제목",
-    "lat": 35.8735226465432, 
-    "lng": 128.810197036642, 
+    "lat": receivedState.lat, 
+    "lng": receivedState.lng, 
     "date": new Date()};
 
   // 이미지 업로드 핸들러
@@ -78,6 +83,10 @@ function ImageUploader() {
     const formattedDate = moment(date).format("YYYY-MM-DD"); // 날짜 포맷팅
     setDate(formattedDate);
   };
+
+  // const useNav = () => {
+  //   useNavigate("/location", );
+  // }
 
   // 이미지와 썸네일 전송 함수
   const handleUpload = async () => {
