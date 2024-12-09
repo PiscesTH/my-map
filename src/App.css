@@ -276,7 +276,7 @@ input[type="date"]::-ms-clear {
   padding: 3px;
   font-size: 27px;
   position: absolute;
-  top: 5%;
-  right: 3%;
+  top: 20px;
+  right: 25px;
   z-index: 3;
 }

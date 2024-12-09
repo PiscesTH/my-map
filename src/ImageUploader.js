@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import moment from "moment";
-import { useEffect } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 function ImageUploader() {
   const [originals, setOriginals] = useState([]);
@@ -13,17 +14,20 @@ function ImageUploader() {
 
   const location = useLocation();
   const receivedState = location.state;
+  const navigate = useNavigate();
 
-  const locationDto = {"title": "임시제목",
-    "lat": receivedState.lat, 
-    "lng": receivedState.lng, 
-    "date": new Date()};
+  const locationDto = {
+    title: "임시제목",
+    lat: receivedState.lat,
+    lng: receivedState.lng,
+    date: new Date(),
+  };
 
   // 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     setOriginals(files);
-  
+
     const thumbnailPromises = files.map((file) => createThumbnail(file));
     Promise.all(thumbnailPromises)
       .then((thumbnails) => {
@@ -76,7 +80,7 @@ function ImageUploader() {
 
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
-  }
+  };
 
   const handleDateChange = (date) => {
     // Calendar에서 날짜 선택 시 호출되는 함수
@@ -84,38 +88,42 @@ function ImageUploader() {
     setDate(formattedDate);
   };
 
-  // const useNav = () => {
-  //   useNavigate("/location", );
-  // }
-
   // 이미지와 썸네일 전송 함수
   const handleUpload = async () => {
     try {
       const formData = new FormData();
-      formData.append("dto", new Blob([JSON.stringify(locationDto)], { type: "application/json" }));
-    // originals 배열의 각 파일을 개별적으로 추가
-    originals.forEach((original, index) => {
-      formData.append(`originals`, original);
-    });
+      formData.append(
+        "dto",
+        new Blob([JSON.stringify(locationDto)], { type: "application/json" })
+      );
+      // originals 배열의 각 파일을 개별적으로 추가
+      originals.forEach((original, index) => {
+        formData.append(`originals`, original);
+      });
 
-    // thumbnails 배열의 각 파일을 개별적으로 추가
-    thumbnails.forEach((thumbnail, index) => {
-      formData.append(`thumbnails`, thumbnail);
-    });
+      // thumbnails 배열의 각 파일을 개별적으로 추가
+      thumbnails.forEach((thumbnail, index) => {
+        formData.append(`thumbnails`, thumbnail);
+      });
 
-      const response = axios.post("http://localhost:8080/api/location", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:8080/api/location",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const ilocation = response.data.data.result;
+      navigate("/location", { state: ilocation });
     } catch (error) {
       console.error("오류 발생:", error);
     }
   };
 
   return (
-    <div>
+    <div className="location-container">
       <h1>이미지 업로드 및 썸네일 생성</h1>
       <input
         type="file"
@@ -131,7 +139,9 @@ function ImageUploader() {
       <label for="fileUpload" className="custom-file-label">
         이미지 업로드
       </label>
-
+      <NavLink className="return-button hover-red" to={"/"}>
+        <FontAwesomeIcon icon={faMapLocationDot} />
+      </NavLink>
       <div>
         <h2>사진 미리보기</h2>
         {thumbnails.map((thumbnail, index) => (
@@ -144,21 +154,25 @@ function ImageUploader() {
         ))}
       </div>
       <button id="calendar-switch" onClick={handleIsOpen}></button>
-      <label for="calendar-switch" className="calendar-switch">날짜 선택</label>
-      {isOpen && <div className="calendar-container">
-        <Calendar
-          onChange={handleDateChange}
-          value={date}
-          formatDay={(locale, date) => moment(date).format("D")}
-          formatYear={(locale, date) => moment(date).format("YYYY")}
-          formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
-          calendarType="gregory"
-          showNeighboringMonth={false}
-          next2Label={null}
-          prev2Label={null}
-          minDetail="year"
-        ></Calendar>
-      </div>}
+      <label for="calendar-switch" className="calendar-switch">
+        날짜 선택
+      </label>
+      {isOpen && (
+        <div className="calendar-container">
+          <Calendar
+            onChange={handleDateChange}
+            value={date}
+            formatDay={(locale, date) => moment(date).format("D")}
+            formatYear={(locale, date) => moment(date).format("YYYY")}
+            formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
+            calendarType="gregory"
+            showNeighboringMonth={false}
+            next2Label={null}
+            prev2Label={null}
+            minDetail="year"
+          ></Calendar>
+        </div>
+      )}
     </div>
   );
 }

@@ -38,7 +38,7 @@ const MyMapMaker = (props) => {
               {props.title === "등록하기" ? (
                 <NavLink to="/record" state={props.position} >{props.title}</NavLink>
               ) : (
-                <NavLink to="/location">{props.title}</NavLink>
+                <NavLink to="/location" state={props.ilocation}>{props.title}</NavLink>
               )}
               {/*               {props.title === "등록하기" ? (
                 <p onClick={setRecordOpen(true)}>{props.title}</p>

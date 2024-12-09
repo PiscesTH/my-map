@@ -3,9 +3,12 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from "react-router-dom";
 
 function Location(props) {
-  const [ilocation, setIlocation] = useState();
+  const location = useLocation();  
+  const ilocation = location.state;
+
   const [title, setTitle] = useState();
   const [date, setDate] = useState();
   const [pictures, setPictures] = useState([]);
@@ -44,11 +47,10 @@ function Location(props) {
       try {
         const res = await axios.get("http://localhost:8080/api/location", {
           params: {
-            ilocation: 6,
+            ilocation: ilocation,
           },
         });
         console.log("data", res.data);
-        setIlocation(res.data.data.ilocation);
         setTitle(res.data.data.title);
         setDate(res.data.data.date);
         setPictures(res.data.data.pictures);

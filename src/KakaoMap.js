@@ -8,14 +8,10 @@ import {
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import MyMapMaker from "./MyMapMaker";
+import { useAppContext } from "./AppContext";
 
 function KakaoMap(props) {
-  const [coordinate, setCoordinate] = useState({
-    // 지도의 초기 위치
-    center: { lat: 33.450701, lng: 126.570667 },
-    // 지도 위치 변경시 panto를 이용할지에 대해서 정의
-    isPanto: false,
-  });
+  const {coordinate, setCoordinate} = useAppContext();
   const [positionsOrigin, setPositionsOrigin] = useState([]);
   const [positions, setPositions] = useState([]);
 
@@ -111,12 +107,13 @@ function KakaoMap(props) {
           isPanto: true,
         }));
 
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setCoordinate({
             center: { lat: parseFloat(data[0].y), lng: parseFloat(data[0].x) },
             isPanto: true,
           });
         }, 0);
+        clearTimeout(timer);
       } else {
         alert("검색 결과가 없습니다.");
       }
@@ -151,10 +148,11 @@ function KakaoMap(props) {
         <MapTypeControl position={"TOPRIGHT"} />
         {positions.map((item) => (
           <MyMapMaker
-            key={`${item.title}-${item.latlng}`}
+            key={`${item.title}-${item.ilocation}`}
             position={item.latlng} // 마커를 표시할 위치
             title={item.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
             date={item.date}
+            ilocation={item.ilocation}
           />
         ))}
         <button
