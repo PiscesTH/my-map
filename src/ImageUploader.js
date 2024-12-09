@@ -127,16 +127,17 @@ function ImageUploader() {
       <h1>이미지 업로드 및 썸네일 생성</h1>
       <input
         type="file"
-        id="fileInput"
+        id="file-input"
+        className="invisible"
         multiple
         accept="image/*"
         onChange={handleImageUpload}
       />
-      <label for="fileInput" class="custom-file-label">
+      <label for="file-input" class="custom-file-label">
         사진 선택
       </label>
-      <button id="fileUpload" onClick={handleUpload}></button>
-      <label for="fileUpload" className="custom-file-label">
+      <button id="file-upload" className="invisible" onClick={handleUpload}></button>
+      <label for="file-upload" className="custom-file-label">
         이미지 업로드
       </label>
       <NavLink className="return-button hover-red" to={"/"}>

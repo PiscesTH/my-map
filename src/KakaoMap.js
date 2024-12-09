@@ -2,16 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Map,
   MapTypeControl,
-  MapMarker,
   ZoomControl,
+  MarkerClusterer,
 } from "react-kakao-maps-sdk";
-import { NavLink } from "react-router-dom";
 import axios from "axios";
 import MyMapMaker from "./MyMapMaker";
 import { useAppContext } from "./AppContext";
 
 function KakaoMap(props) {
-  const {coordinate, setCoordinate} = useAppContext();
+  const { coordinate, setCoordinate } = useAppContext();
   const [positionsOrigin, setPositionsOrigin] = useState([]);
   const [positions, setPositions] = useState([]);
 
@@ -146,15 +145,20 @@ function KakaoMap(props) {
       >
         <ZoomControl />
         <MapTypeControl position={"TOPRIGHT"} />
-        {positions.map((item) => (
-          <MyMapMaker
-            key={`${item.title}-${item.ilocation}`}
-            position={item.latlng} // 마커를 표시할 위치
-            title={item.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-            date={item.date}
-            ilocation={item.ilocation}
-          />
-        ))}
+        <MarkerClusterer
+          averageCenter={true} // 클러스터 중심을 데이터의 평균값으로 설정
+          minLevel={8} // 클러스터가 생성되는 최소 레벨 (확대 정도)
+        >
+          {positions.map((item) => (
+            <MyMapMaker
+              key={`${item.title}-${item.ilocation}`}
+              position={item.latlng} // 마커를 표시할 위치
+              title={item.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+              date={item.date}
+              ilocation={item.ilocation}
+            />
+          ))}
+        </MarkerClusterer>
         <button
           onClick={() =>
             setCoordinate({
