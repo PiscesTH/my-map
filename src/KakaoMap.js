@@ -11,6 +11,7 @@ import { useAppContext } from "./AppContext";
 
 function KakaoMap(props) {
   const { coordinate, setCoordinate } = useAppContext();
+  const [mapKey, setMapKey] = useState(0);
   const [positionsOrigin, setPositionsOrigin] = useState([]);
   const [positions, setPositions] = useState([]);
 
@@ -125,23 +126,52 @@ function KakaoMap(props) {
     }
   };
 
+  const [isHide, setishide] = useState(true);
+  const hideMarker = () => {
+    if (isHide) {
+      setPositions([]);
+    } else {
+      setPositions(positionsOrigin);
+    }
+    setishide((prev) => !prev);
+    setCenter();
+    setMapKey((prevKey) => prevKey + 1);
+    console.log("visible value", isHide);
+  };
+
+  const mapClickEvent = (_target, mouseEvent) => {
+    const latlng = mouseEvent.latLng;
+    setPositions([
+      ...positionsOrigin,
+      {
+        title: "등록하기",
+        latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
+      },
+    ]);
+    setCenter();
+    setMapKey((prevKey) => prevKey + 1);
+  };
+
+  const setCenter = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    const center = map.getCenter();
+
+    setCoordinate({
+      center: { lat: center.getLat(), lng: center.getLng() },
+      isPanto: true,
+    });
+  };
+
   return (
     <>
       <Map
+        key={mapKey}
         center={coordinate.center}
         // style={{ width: "100%", height: "600px"}}
         level={3}
         ref={mapRef}
-        onClick={(_target, mouseEvent) => {
-          const latlng = mouseEvent.latLng;
-          setPositions([
-            ...positionsOrigin,
-            {
-              title: "등록하기",
-              latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
-            },
-          ]);
-        }}
+        onClick={(_target, mouseEvent) => mapClickEvent(_target, mouseEvent)}
       >
         <ZoomControl />
         <MapTypeControl position={"TOPRIGHT"} />
@@ -159,16 +189,7 @@ function KakaoMap(props) {
             />
           ))}
         </MarkerClusterer>
-        <button
-          onClick={() =>
-            setCoordinate({
-              center: { lat: 35.8735226465432, lng: 128.810197036642 },
-              isPanto: false,
-            })
-          }
-        >
-          지정된 좌표로 이동
-        </button>
+        <button onClick={hideMarker}>기존 마커 숨기기</button>
         <button id="getInfoBtn" onClick={getInfo}>
           맵정보 가져오기
         </button>
