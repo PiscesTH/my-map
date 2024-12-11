@@ -1,18 +1,18 @@
 import React from "react";
 import { useAppContext } from "./AppContext";
 
-const ModalForDel = () => {
+const ModalForDel = ({deleteFunction}) => {
   const { closeModal } = useAppContext();
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
+    <div className="delete-modal__backdrop">
+      <div className="delete-modal">
         <h2>삭제하시겠습니까?</h2>
-        <div className="buttons">
-          <button className="confirm" >
+        <div className="delete-modal__buttons">
+          <button className="delete-modal__confirm" onClick={deleteFunction}>
             삭제
           </button>
-          <button className="cancel" onClick={closeModal}>
+          <button className="delete-modal__cancel" onClick={() => closeModal()}>
             취소
           </button>
         </div>

@@ -25,6 +25,7 @@ export function AppProvider({ children }) {
   const [openMarkerId, setOpenMarkerId] = useState(null);
   const openInfo = (id) => {
     setOpenMarkerId(id);
+    setIsModalOpen(false);
   }
 
   const closeInfo = () => {

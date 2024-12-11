@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faMapLocationDot,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
+import ModalForDel from "./ModalForDel";
+import { useAppContext } from "./AppContext";
 
 function Location(props) {
-  const location = useLocation();  
+  const location = useLocation();
   const ilocation = location.state;
 
   const [title, setTitle] = useState();
@@ -14,27 +20,28 @@ function Location(props) {
   const [pictures, setPictures] = useState([]);
   const [ipicture, setIpicture] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+  const { isModalOpen, openModal, closeModal } = useAppContext();
 
   // 모달 열기
-  const openModal = (image, event) => {
+  const openImageModal = (image, event) => {
     const str = JSON.stringify(image.thumbnails);
     setSelectedImage(str.slice(3, str.indexOf("&quot")));
     setIpicture(event.currentTarget.dataset.pk);
   };
 
   // 모달 닫기
-  const closeModal = () => {
+  const closeImageModal = () => {
     setSelectedImage(null);
     setIpicture(0);
   };
 
-  const deletePicture = async (event) => {
-    const pk = event.currentTarget.dataset.pk;
+  const deletePicture = async (pk) => {
     try {
       const res = await axios.delete(
         `http://localhost:8080/api/location/${pk}`
       );
-      const timer = setTimeout(() => closeModal(), 1000);
+      closeModal(false);
+      const timer = setTimeout(() => closeImageModal(), 1000);
       clearTimeout(timer);
       window.location.reload();
     } catch (err) {
@@ -65,7 +72,7 @@ function Location(props) {
   return (
     <div className="location-container">
       <NavLink className="return-button hover-red" to={"/"}>
-      <FontAwesomeIcon icon={faMapLocationDot} />
+        <FontAwesomeIcon icon={faMapLocationDot} />
       </NavLink>
       <h2>제목 : {title}</h2>
       <div>{date}</div>
@@ -77,28 +84,46 @@ function Location(props) {
           src={`http://localhost:8080/location/${ilocation}/${thumbnail.thumbnails}`}
           alt={thumbnail.thumbnails}
           className="thumbnails"
-          onClick={(event) => openModal(thumbnail, event)}
+          onClick={(event) => openImageModal(thumbnail, event)}
         />
       ))}
       {/* 모달 */}
       {selectedImage && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close-button hover-red" onClick={closeModal}>
+        <div className="image-modal">
+          <div className="image-modal__content">
+            <span
+              className="image-modal__close-button hover-red"
+              onClick={() => closeImageModal()}
+            >
               &times;
             </span>
             <span
-              className="delete-button hover-red"
+              className="image-modal__download-button hover-red"
               data-pk={ipicture}
-              onClick={(event) => deletePicture(event)}
+              onClick={() => console.log("다운로드 버튼")}
+            >
+              <FontAwesomeIcon icon={faDownload} />
+            </span>
+            <span
+              className="image-modal__delete-button hover-red"
+              data-pk={ipicture}
+              onClick={() => openModal()}
+              // onClick={(event) => deletePicture(event)}
             >
               <FontAwesomeIcon icon={faTrash} />
             </span>
             <img
               src={`http://localhost:8080/location/${ilocation}/${selectedImage}`}
               alt={selectedImage}
-              className="modal-image"
+              className="image-modal__image"
             />
+            {isModalOpen && (
+              <div className="modal-overlay">
+                <ModalForDel
+                  deleteFunction={() => deletePicture(ipicture)}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
