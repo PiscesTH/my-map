@@ -37,9 +37,11 @@ function Location(props) {
 
   const deletePicture = async (pk) => {
     try {
-      const res = await axios.delete(
-        `http://localhost:8080/api/location/pic/${pk}`
-      );
+      const res = await axios.delete("http://localhost:8080/api/location/pic", {
+        params: {
+          ipicture: pk,
+        },
+      });
       closeModal(false);
       const timer = setTimeout(() => closeImageModal(), 1000);
       clearTimeout(timer);
@@ -52,12 +54,25 @@ function Location(props) {
   const downloadImage = async () => {
     console.log(typeof selectedImage);
     console.log(ipicture);
-  }
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/location/pic/${selectedImage}`,
+        {
+          params: { ipicture: ipicture },
+        }
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/api/location/${ilocation}`);
+        const res = await axios.get(
+          `http://localhost:8080/api/location/${ilocation}`
+        );
         console.log("data", res.data);
         setTitle(res.data.data.title);
         setDate(res.data.data.date);
@@ -120,9 +135,7 @@ function Location(props) {
             />
             {isModalOpen && (
               <div className="modal-overlay">
-                <ModalForDel
-                  deleteFunction={() => deletePicture(ipicture)}
-                />
+                <ModalForDel deleteFunction={() => deletePicture(ipicture)} />
               </div>
             )}
           </div>
