@@ -18,7 +18,7 @@ function KakaoMap(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api");
+        const res = await axios.get("http://localhost:8080/api/location");
         const data = res.data.data;
         console.log(data);
         setPositionsOrigin(data);

@@ -38,7 +38,7 @@ function Location(props) {
   const deletePicture = async (pk) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8080/api/location/${pk}`
+        `http://localhost:8080/api/location/pic/${pk}`
       );
       closeModal(false);
       const timer = setTimeout(() => closeImageModal(), 1000);
@@ -49,14 +49,15 @@ function Location(props) {
     }
   };
 
+  const downloadImage = async () => {
+    console.log(typeof selectedImage);
+    console.log(ipicture);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/location", {
-          params: {
-            ilocation: ilocation,
-          },
-        });
+        const res = await axios.get(`http://localhost:8080/api/location/${ilocation}`);
         console.log("data", res.data);
         setTitle(res.data.data.title);
         setDate(res.data.data.date);
@@ -100,7 +101,7 @@ function Location(props) {
             <span
               className="image-modal__download-button hover-red"
               data-pk={ipicture}
-              onClick={() => console.log("다운로드 버튼")}
+              onClick={() => downloadImage()}
             >
               <FontAwesomeIcon icon={faDownload} />
             </span>
