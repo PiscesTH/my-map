@@ -15,10 +15,67 @@ a {
 
 .container {
   width: 1000px;
-  height: 1000px;
-  background-color: aliceblue;
+  height: 100vh;
+  border: 2px solid #9AA6B2;
 }
 
+#root{
+  display: flex;
+  justify-content: center;
+  background-color: #F8FAFC;
+}
+
+/* header */
+.header-container {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #BCCCDC;
+  margin-bottom: 20px;
+}
+
+.th{
+  display: inline-block;
+}
+
+.header-nav {
+  display: flex;
+  list-style: none;
+}
+
+.th {
+  margin-left: 30px;
+}
+
+.home {
+  padding: 3px;
+  border-radius: 5px;
+}
+
+li > button {
+  font-size: 1rem;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  color: black;
+}
+
+.header-nav > li {
+  margin: auto 10px;
+  padding: 5px 5px;
+}
+
+.header-nav > li:last-child {
+  margin-right: 30px;
+}
+
+.active {
+  background: #F8FAFC;
+}
+
+/*  */
 .location-container {
   position: relative;
   width: 100%;

@@ -87,33 +87,15 @@ function KakaoMap(props) {
       alert("검색어를 입력하세요!");
       return;
     }
-
+    console.log(searchKeyword);
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(searchKeyword, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
-        /*         const newPositions = data.map((place) => ({
-          title: place.place_name,
-          latlng: { lat: parseFloat(place.y), lng: parseFloat(place.x) },
-        }));
-        const totalLat = newPositions.reduce((sum, pos) => sum + pos.latlng.lat, 0);
-        const totalLng = newPositions.reduce((sum, pos) => sum + pos.latlng.lng, 0);
-        const centerLat = totalLat / newPositions.length;
-        const centerLng = totalLng / newPositions.length; */
         setCoordinate((prev) => ({
-          center: {
-            lat: prev.center.lat + 0.00001,
-            lng: prev.center.lng + 0.00001,
-          },
+          center: { lat: parseFloat(data[0].y), lng: parseFloat(data[0].x) },
           isPanto: true,
         }));
-
-        const timer = setTimeout(() => {
-          setCoordinate({
-            center: { lat: parseFloat(data[0].y), lng: parseFloat(data[0].x) },
-            isPanto: true,
-          });
-        }, 0);
-        clearTimeout(timer);
+        setMapKey((prev) => prev + 1);
       } else {
         alert("검색 결과가 없습니다.");
       }
@@ -135,7 +117,7 @@ function KakaoMap(props) {
     }
     setishide((prev) => !prev);
     setCenter();
-    setMapKey((prevKey) => prevKey + 1);
+    setMapKey((prev) => prev + 1);
     console.log("visible value", isHide);
   };
 

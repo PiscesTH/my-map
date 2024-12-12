@@ -14,35 +14,22 @@ function Header() {
       <h1 className="th">
         <a href="/">TH</a>
       </h1>
-{/*       <div className="menu">
+      <div className="menu">
         <nav>
           <ul className="header-nav">
             <li>
               <button>
-                <NavLink exact="true" to="/">
+                <NavLink className={'home'} exact="true" to="/">
                   홈
                 </NavLink>
               </button>
             </li>
-            <li>
-              <button>
-                <NavLink to="/list">내역</NavLink>
-              </button>
-            </li>
-            {isLoggedIn ? (
               <li>
-                <button onClick={handleLogout}>로그아웃</button>
+                <button>로그아웃</button>
               </li>
-            ) : (
-              <li>
-                <button>
-                  <NavLink to="/login">로그인</NavLink>
-                </button>
-              </li>
-            )}
           </ul>
         </nav>
-      </div> */}
+      </div>
     </div>
   );
 }

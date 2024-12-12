@@ -39,7 +39,7 @@ function Location(props) {
     try {
       const res = await axios.delete("http://localhost:8080/api/location/pic", {
         params: {
-          ipicture: pk,
+          ipicture: ipicture,
         },
       });
       closeModal(false);
@@ -52,18 +52,26 @@ function Location(props) {
   };
 
   const downloadImage = async () => {
-    console.log(typeof selectedImage);
-    console.log(ipicture);
+    const imageName = selectedImage; // 다운로드할 이미지 이름
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/location/pic/${selectedImage}`,
-        {
-          params: { ipicture: ipicture },
-        }
-      );
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
+      const response = await axios.get(`http://localhost:8080/api/location/pic/${imageName}`, {
+        params: {ilocation: ilocation},
+        responseType: 'blob',
+      });
+
+      const imageBlob = response.data;
+      const imageUrl = window.URL.createObjectURL(imageBlob);
+
+      const a = document.createElement('a');
+      a.href = imageUrl;
+      a.download = imageName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      window.URL.revokeObjectURL(imageUrl);
+    } catch (error) {
+      console.error("Failed to download image", error);
     }
   };
 
@@ -73,7 +81,6 @@ function Location(props) {
         const res = await axios.get(
           `http://localhost:8080/api/location/${ilocation}`
         );
-        console.log("data", res.data);
         setTitle(res.data.data.title);
         setDate(res.data.data.date);
         setPictures(res.data.data.pictures);
@@ -115,8 +122,7 @@ function Location(props) {
             </span>
             <span
               className="image-modal__download-button hover-red"
-              data-pk={ipicture}
-              onClick={() => downloadImage()}
+              onClick={downloadImage}
             >
               <FontAwesomeIcon icon={faDownload} />
             </span>
