@@ -19,14 +19,27 @@ function Header() {
           <ul className="header-nav">
             <li>
               <button>
-                <NavLink className={'home'} exact="true" to="/">
-                  홈
+                <NavLink className={'menu__button'} exact="true" to="/">
+                  지도
                 </NavLink>
               </button>
             </li>
-              <li>
-                <button>로그아웃</button>
+            <li>
+                <button>
+                  <NavLink to="/login">로그인</NavLink>
+                </button>
               </li>
+            {/* {isLoggedIn ? (
+              <li>
+                <button onClick={handleLogout}>로그아웃</button>
+              </li>
+            ) : (
+              <li>
+                <button>
+                  <NavLink to="/login">로그인</NavLink>
+                </button>
+              </li>
+            )} */}
           </ul>
         </nav>
       </div>

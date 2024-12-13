@@ -1,0 +1,5 @@
+const dummyLocation = [
+    
+];
+
+export {dummyLocation};
