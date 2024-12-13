@@ -7,7 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import LoginPage from "./LoginPage";
 import {AuthProvider} from "./AuthContext"
-// import SignupPage from "./SignupPage";
+import SignupPage from "./SignupPage";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           <Route path="/location" element={<Location />}></Route>
           <Route path="/record" element={<ImageUploader />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
-          {/* <Route path="/register" element={<SignupPage />}></Route> */}
+          <Route path="/register" element={<SignupPage />}></Route>
         </Routes>
       </main>
     </div>
