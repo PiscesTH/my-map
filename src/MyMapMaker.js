@@ -5,7 +5,7 @@ import moment from "moment";
 import icon from "./icon/location-icon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCamera } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import axios from "./axios";
 import { useAppContext } from "./AppContext";
 import ModalForDel from "./ModalForDel";
 
@@ -19,7 +19,7 @@ const MyMapMaker = (props) => {
   const deleteLocation = async (pk) => {
     console.log('삭제함수 실행됨');
     try {
-      const res = await axios.delete("http://localhost:8080/api/location", {
+      const res = await axios.delete("/location", {
         params: {
           ilocation: pk,
         },

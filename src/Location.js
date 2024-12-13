@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -37,7 +37,7 @@ function Location(props) {
 
   const deletePicture = async (pk) => {
     try {
-      const res = await axios.delete("http://localhost:8080/api/location/pic", {
+      const res = await axios.delete("/location/pic", {
         params: {
           ipicture: ipicture,
         },
@@ -54,7 +54,7 @@ function Location(props) {
   const downloadImage = async () => {
     const imageName = selectedImage; // 다운로드할 이미지 이름
     try {
-      const response = await axios.get(`http://localhost:8080/api/location/pic/${imageName}`, {
+      const response = await axios.get(`/location/pic/${imageName}`, {
         params: {ilocation: ilocation},
         responseType: 'blob',
       });
@@ -79,7 +79,7 @@ function Location(props) {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/location/${ilocation}`
+          `/location/${ilocation}`
         );
         setTitle(res.data.data.title);
         setDate(res.data.data.date);

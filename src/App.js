@@ -1,6 +1,6 @@
 import "./App.css";
 import ImageUploader from "./ImageUploader";
-import KakaoMap from "./KakaoMap";
+import KakaoMap from "./MyKakaoMap";
 import Location from "./Location";
 import Header from "./Header";
 import { Route, Routes } from "react-router-dom";

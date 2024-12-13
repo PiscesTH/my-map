@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import moment from "moment";
-import axios from "axios";
+import axios from "./axios";
 import { useLocation, useNavigate, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
@@ -107,7 +107,7 @@ function ImageUploader() {
       });
 
       const response = await axios.post(
-        "http://localhost:8080/api/location",
+        "/location",
         formData,
         {
           headers: {

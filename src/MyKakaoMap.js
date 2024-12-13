@@ -5,7 +5,7 @@ import {
   ZoomControl,
   MarkerClusterer,
 } from "react-kakao-maps-sdk";
-import axios from "axios";
+import axios from "./axios";
 import MyMapMaker from "./MyMapMaker";
 import { useAppContext } from "./AppContext";
 
@@ -18,11 +18,10 @@ function KakaoMap(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/location");
-        const data = res.data.data;
-        console.log(data);
-        setPositionsOrigin(data);
-        setPositions(data);
+          const res = await axios.get("/location");
+          const data = res.data.data;
+          setPositionsOrigin(data);
+          setPositions(data);
       } catch (err) {
         console.log(err);
         alert("서버에 문제가 발생했습니다. 페이지를 새로고침해주세요.");
