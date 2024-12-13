@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import axios from "./axios";
 
 // 1. Context 생성
 const AppContext = createContext();
@@ -14,13 +15,8 @@ export function AppProvider({ children }) {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  const [coordinate, setCoordinate] = useState({
-    // 지도의 초기 위치
-    center: { lat: 33.450701, lng: 126.570667 },
-    // 지도 위치 변경시 panto를 이용할지에 대해서 정의
-    isPanto: false,
-  });
+  
+  const [coordinate, setCoordinate] = useState(null);
 
   const [openMarkerId, setOpenMarkerId] = useState(null);
   const openInfo = (id) => {
@@ -31,6 +27,24 @@ export function AppProvider({ children }) {
   const closeInfo = () => {
     setOpenMarkerId(null);
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("/user/coordinate");
+        const data = res.data.data;
+        console.log(data);
+        setCoordinate({
+          center: { lat: data.lat, lng: data.lng },
+          isPanto: false,
+        })
+      } catch(err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+    console.log("target active")
+  },[])
 
   return (
     <AppContext.Provider

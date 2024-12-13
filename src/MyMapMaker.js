@@ -4,7 +4,7 @@ import { MapMarker } from "react-kakao-maps-sdk";
 import moment from "moment";
 import icon from "./icon/location-icon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faCamera } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faCamera, faPen } from "@fortawesome/free-solid-svg-icons";
 import axios from "./axios";
 import { useAppContext } from "./AppContext";
 import ModalForDel from "./ModalForDel";
@@ -74,7 +74,7 @@ const MyMapMaker = (props) => {
           <div className="location-info-data info-title">
             {props.title === "등록하기" ? (
               <NavLink to="/record" state={props.position}>
-                {props.title}
+                {props.title} <FontAwesomeIcon icon={faPen} />
               </NavLink>
             ) : (
               <NavLink to="/location" state={props.ilocation}>

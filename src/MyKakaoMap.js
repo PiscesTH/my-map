@@ -18,10 +18,21 @@ function KakaoMap(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-          const res = await axios.get("/location");
-          const data = res.data.data;
+        const [res, res2] = await Promise.all([
+        axios.get("/location"),
+        axios.get("/user/coordinate")
+        ])
+        const data = res.data.data;
+        if(data) {
           setPositionsOrigin(data);
           setPositions(data);
+        }
+        const coordinateData = res2.data.data;
+        console.log(coordinateData);
+        setCoordinate({
+            center: { lat: coordinateData.lat, lng: coordinateData.lng },
+            isPanto: false,
+          })
       } catch (err) {
         console.log(err);
         alert("서버에 문제가 발생했습니다. 페이지를 새로고침해주세요.");
@@ -33,51 +44,20 @@ function KakaoMap(props) {
   const mapRef = useRef(null);
   const [info, setInfo] = useState("");
 
-  const getInfo = () => {
+  const changeCenter = async () => {
     const map = mapRef.current;
     console.log(mapRef);
     console.log(map);
     if (!map) return;
 
     const center = map.getCenter();
-
-    // 지도의 현재 레벨을 얻어옵니다
-    const level = map.getLevel();
-
-    // 지도타입을 얻어옵니다
-    const mapTypeId = map.getMapTypeId();
-
-    // 지도의 현재 영역을 얻어옵니다
-    const bounds = map.getBounds();
-
-    // 영역의 남서쪽 좌표를 얻어옵니다
-    const swLatLng = bounds.getSouthWest();
-
-    // 영역의 북동쪽 좌표를 얻어옵니다
-    const neLatLng = bounds.getNorthEast();
-
-    // 영역정보를 문자열로 얻어옵니다. ((남,서), (북,동)) 형식입니다
-    // const boundsStr = bounds.toString()
-
-    let message = "지도 중심좌표는 위도 " + center.getLat() + ", <br>";
-    message += "경도 " + center.getLng() + " 이고 <br>";
-    message += "지도 레벨은 " + level + " 입니다 <br> <br>";
-    message += "지도 타입은 " + mapTypeId + " 이고 <br> ";
-    message +=
-      "지도의 남서쪽 좌표는 " +
-      swLatLng.getLat() +
-      ", " +
-      swLatLng.getLng() +
-      " 이고 <br>";
-    message +=
-      "북동쪽 좌표는 " +
-      neLatLng.getLat() +
-      ", " +
-      neLatLng.getLng() +
-      " 입니다";
-    setInfo(message);
-    console.log(info);
-    console.log(message);
+    const formData = { lat: center.getLat(), lng: center.getLng() };
+    try {
+      const res = await axios.patch("/user/coordinate", formData);
+      setCoordinate({ center: formData, isPanto: false });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색 키워드 상태 추가
@@ -171,15 +151,9 @@ function KakaoMap(props) {
           ))}
         </MarkerClusterer>
         <button onClick={hideMarker}>기존 마커 숨기기</button>
-        <button id="getInfoBtn" onClick={getInfo}>
-          맵정보 가져오기
+        <button id="getInfoBtn" onClick={setCenter}>
+          지도 중앙 설정
         </button>
-        <p
-          id="info"
-          dangerouslySetInnerHTML={{
-            __html: info,
-          }}
-        />
       </Map>
       <div className="search">
         <input
