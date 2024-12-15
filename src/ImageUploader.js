@@ -106,15 +106,11 @@ function ImageUploader() {
         formData.append(`thumbnails`, thumbnail);
       });
 
-      const response = await axios.post(
-        "/location",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("/location", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       const ilocation = response.data.data.result;
       navigate("/location", { state: ilocation });
     } catch (error) {
@@ -136,8 +132,15 @@ function ImageUploader() {
       <label for="file-input" class="custom-file-label">
         사진 선택
       </label>
-      <button id="file-upload" className="invisible" onClick={handleUpload}></button>
-      <label for="file-upload" className="custom-file-label">
+      <button
+        id="file-upload"
+        className="invisible"
+        onClick={handleUpload}
+      ></button>
+      <label
+        htmlFor={thumbnails.length ? "file-upload" : undefined}
+        className={`custom-file-label ${thumbnails.length ? "" : "disabled-label"}`}
+      >
         이미지 업로드
       </label>
       <NavLink className="return-button hover-red" to={"/"}>

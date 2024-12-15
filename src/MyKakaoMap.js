@@ -18,21 +18,28 @@ function KakaoMap(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [res, res2] = await Promise.all([
-        axios.get("/location"),
-        axios.get("/user/coordinate")
-        ])
-        const data = res.data.data;
-        if(data) {
+        if (sessionStorage.getItem("accessToken")) {
+          const [res, res2] = await Promise.all([
+            axios.get("/location"),
+            axios.get("/user/coordinate"),
+          ]);
+          const data = res.data.data;
+          const data2 = res2.data.data;
+          setCoordinate({
+            center: { lat: data2.lat, lng: data2.lng },
+          isPanto: false,
+        })
+          if (data) {
+            setPositionsOrigin(data);
+            setPositions(data);
+          }
+        } else {
+          const res = await axios.get("/location/dummy");
+          const data = res.data.data;
           setPositionsOrigin(data);
           setPositions(data);
+          console.log("비로그인");
         }
-        const coordinateData = res2.data.data;
-        console.log(coordinateData);
-        setCoordinate({
-            center: { lat: coordinateData.lat, lng: coordinateData.lng },
-            isPanto: false,
-          })
       } catch (err) {
         console.log(err);
         alert("서버에 문제가 발생했습니다. 페이지를 새로고침해주세요.");
@@ -46,8 +53,6 @@ function KakaoMap(props) {
 
   const changeCenter = async () => {
     const map = mapRef.current;
-    console.log(mapRef);
-    console.log(map);
     if (!map) return;
 
     const center = map.getCenter();
@@ -151,7 +156,11 @@ function KakaoMap(props) {
           ))}
         </MarkerClusterer>
         <button onClick={hideMarker}>기존 마커 숨기기</button>
-        <button id="getInfoBtn" onClick={setCenter}>
+        <button
+          id="getInfoBtn"
+          onClick={changeCenter}
+          disabled={!sessionStorage.getItem("accessToken")}
+        >
           지도 중앙 설정
         </button>
       </Map>

@@ -113,7 +113,7 @@ function Location(props) {
       {/* 모달 */}
       {selectedImage && (
         <div className="image-modal">
-          <div className="image-modal__content">
+          <div className={`image-modal__content ${isModalOpen ? "" : "scrollable"}`}>
             <span
               className="image-modal__close-button hover-red"
               onClick={() => closeImageModal()}

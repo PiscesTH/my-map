@@ -25,6 +25,12 @@ a {
   background-color: #F8FAFC;
 }
 
+.disabled-label {
+  pointer-events: none; /* 클릭 불가 */
+  opacity: 0.5;         /* 흐려진 효과 */
+  cursor: not-allowed;  /* 비활성화 커서 */
+}
+
 /* header */
 .header-container {
   z-index: 1;
@@ -242,7 +248,7 @@ input[type="date"]::-ms-clear {
   display: none;
 }
 
-/* 모달 css */
+/* location__image-modal css */
 .image-modal {
   position: fixed;
   top: 0;
@@ -263,10 +269,14 @@ input[type="date"]::-ms-clear {
   border-radius: 8px;
   max-width: 800px;
   max-height: 800px;
-  overflow: scroll;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.scrollable {
+  overflow: scroll;
 }
 
 .modal-overlay {

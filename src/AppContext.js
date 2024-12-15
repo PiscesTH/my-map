@@ -16,7 +16,10 @@ export function AppProvider({ children }) {
     setIsModalOpen(false);
   };
   
-  const [coordinate, setCoordinate] = useState(null);
+  const [coordinate, setCoordinate] = useState({
+    center: { lat: 33.450701, lng: 126.570667 },
+    isPanto: false,
+  });
 
   const [openMarkerId, setOpenMarkerId] = useState(null);
   const openInfo = (id) => {
@@ -28,23 +31,24 @@ export function AppProvider({ children }) {
     setOpenMarkerId(null);
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/user/coordinate");
-        const data = res.data.data;
-        console.log(data);
-        setCoordinate({
-          center: { lat: data.lat, lng: data.lng },
-          isPanto: false,
-        })
-      } catch(err) {
-        console.log(err);
-      }
-    }
-    fetchData();
-    console.log("target active")
-  },[])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.get("/user/coordinate");
+  //       const data = res.data.data;
+  //       setCoordinate({
+  //         center: { lat: data.lat, lng: data.lng },
+  //         isPanto: false,
+  //       })
+  //       console.log('Request Headers:', res.config.headers);
+  //     } catch(err) {
+  //       console.log(err);
+  //     }
+  //   }
+  //   if (sessionStorage.getItem('accessToken')) {
+  //     fetchData();
+  //   }
+  // },[])
 
   return (
     <AppContext.Provider
