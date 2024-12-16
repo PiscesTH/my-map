@@ -5,12 +5,14 @@ import axios from "./axios";
 import { useLocation, useNavigate, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import MyForm from "./MyForm";
 
 function ImageUploader() {
   const [originals, setOriginals] = useState([]);
   const [thumbnails, setThumbnails] = useState([]);
-  const [date, setDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState(moment(new Date()));
+  const [title, setTitle] = useState();
 
   const location = useLocation();
   const receivedState = location.state;
@@ -120,7 +122,7 @@ function ImageUploader() {
 
   return (
     <div className="location-container">
-      <h1>이미지 업로드 및 썸네일 생성</h1>
+      <MyForm/>
       <input
         type="file"
         id="file-input"
@@ -139,15 +141,17 @@ function ImageUploader() {
       ></button>
       <label
         htmlFor={thumbnails.length ? "file-upload" : undefined}
-        className={`custom-file-label ${thumbnails.length ? "" : "disabled-label"}`}
+        className={`custom-file-label ${
+          thumbnails.length ? "" : "disabled-label"
+        }`}
       >
         이미지 업로드
       </label>
       <NavLink className="return-button hover-red" to={"/"}>
         <FontAwesomeIcon icon={faMapLocationDot} />
       </NavLink>
-      <div>
-        <h2>사진 미리보기</h2>
+      <h2>사진 미리보기</h2>
+      <div className="thumbnail-container">
         {thumbnails.map((thumbnail, index) => (
           <img
             key={index}

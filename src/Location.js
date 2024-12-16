@@ -100,16 +100,18 @@ function Location(props) {
       <h2>제목 : {title}</h2>
       <div>{date}</div>
       <h3>사진 미리보기</h3>
+      <div className="thumbnail-container">
       {pictures.map((thumbnail, index) => (
         <img
-          key={index}
-          data-pk={thumbnail.ipicture}
-          src={`http://localhost:8080/location/${ilocation}/${thumbnail.thumbnails}`}
-          alt={thumbnail.thumbnails}
-          className="thumbnails"
-          onClick={(event) => openImageModal(thumbnail, event)}
+        key={index}
+        data-pk={thumbnail.ipicture}
+        src={`http://localhost:8080/location/${ilocation}/${thumbnail.thumbnails}`}
+        alt={thumbnail.thumbnails}
+        className="thumbnails"
+        onClick={(event) => openImageModal(thumbnail, event)}
         />
       ))}
+      </div>
       {/* 모달 */}
       {selectedImage && (
         <div className="image-modal">
