@@ -10,6 +10,7 @@ import {
 import { useLocation } from "react-router-dom";
 import ModalForDel from "./ModalForDel";
 import { useAppContext } from "./AppContext";
+import moment from "moment";
 
 function Location(props) {
   const location = useLocation();
@@ -34,6 +35,12 @@ function Location(props) {
     setSelectedImage(null);
     setIpicture(0);
   };
+
+    const dateFormatter = (date) => {
+      // Calendar에서 날짜 선택 시 호출되는 함수
+      const formattedDate = moment(date).format("YYYY-MM-DD"); // 날짜 포맷팅
+      return formattedDate;
+    };
 
   const deletePicture = async (pk) => {
     try {
@@ -97,9 +104,8 @@ function Location(props) {
       <NavLink className="return-button hover-red" to={"/"}>
         <FontAwesomeIcon icon={faMapLocationDot} />
       </NavLink>
-      <h2>제목 : {title}</h2>
-      <div>{date}</div>
-      <h3>사진 미리보기</h3>
+      <h2 className="location__title">{title}</h2>
+      <div className="location__date">{dateFormatter(date)}</div>
       <div className="thumbnail-container">
       {pictures.map((thumbnail, index) => (
         <img

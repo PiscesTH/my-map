@@ -19,29 +19,25 @@ function KakaoMap(props) {
     const fetchData = async () => {
       try {
         if (sessionStorage.getItem("accessToken")) {
-          const [res, res2] = await Promise.all([
-            axios.get("/location"),
-            axios.get("/user/coordinate"),
-          ]);
+          const res = await axios.get("/location");
+          const res2 = await axios.get("/user/coordinate");
           const data = res.data.data;
-          const data2 = res2.data.data;
-          setCoordinate({
-            center: { lat: data2.lat, lng: data2.lng },
-          isPanto: false,
-        })
           if (data) {
             setPositionsOrigin(data);
             setPositions(data);
           }
+          const data2 = res2.data.data;
+          setCoordinate({
+            center: { lat: data2.lat, lng: data2.lng },
+            isPanto: false,
+          });
         } else {
           const res = await axios.get("/location/dummy");
           const data = res.data.data;
           setPositionsOrigin(data);
           setPositions(data);
-          console.log("비로그인");
         }
       } catch (err) {
-        console.log(err);
         alert("서버에 문제가 발생했습니다. 페이지를 새로고침해주세요.");
       }
     };
@@ -49,7 +45,6 @@ function KakaoMap(props) {
   }, []);
 
   const mapRef = useRef(null);
-  const [info, setInfo] = useState("");
 
   const changeCenter = async () => {
     const map = mapRef.current;
@@ -152,28 +147,30 @@ function KakaoMap(props) {
               title={item.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
               date={item.date}
               ilocation={item.ilocation}
+              popPositions={()=> setPositions(positionsOrigin)}
             />
           ))}
         </MarkerClusterer>
-        <button onClick={hideMarker}>기존 마커 숨기기</button>
-        <button
-          id="getInfoBtn"
-          onClick={changeCenter}
-          disabled={!sessionStorage.getItem("accessToken")}
-        >
-          지도 중앙 설정
-        </button>
       </Map>
-      <div className="search">
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={{ width: "200px", marginRight: "10px" }}
-        />
-        <button onClick={searchPlaces}>검색</button>
+      <div className="map__button-container">
+        <div>
+          <button onClick={hideMarker}>기존 마커 숨기기</button>
+          {sessionStorage.getItem("accessToken") && (
+            <button id="getInfoBtn" onClick={changeCenter}>
+              지도 중앙 설정
+            </button>
+          )}
+        </div>
+        <div className="map__button__search">
+          <input
+            type="text"
+            placeholder="지도 검색"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button onClick={searchPlaces}>검색</button>
+        </div>
       </div>
     </>
   );
