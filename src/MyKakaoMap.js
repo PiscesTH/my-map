@@ -122,6 +122,7 @@ function KakaoMap(props) {
       center: { lat: center.getLat(), lng: center.getLng() },
       isPanto: true,
     });
+    onMapLoad(map);
   };
 
   const onMapLoad = (map) => {
