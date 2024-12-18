@@ -14,6 +14,7 @@ function KakaoMap(props) {
   const [mapKey, setMapKey] = useState(0);
   const [positionsOrigin, setPositionsOrigin] = useState([]);
   const [positions, setPositions] = useState([]);
+  const [mapLevel, setMapLevel] = useState(3);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +67,6 @@ function KakaoMap(props) {
       alert("검색어를 입력하세요!");
       return;
     }
-    console.log(searchKeyword);
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(searchKeyword, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
@@ -124,15 +124,23 @@ function KakaoMap(props) {
     });
   };
 
+  const onMapLoad = (map) => {
+    if (map.getLevel() !== mapLevel) {
+      setMapLevel(map.getLevel());
+      map.setLevel(mapLevel);  // 맵이 로딩될 때 level이 이미 설정된 값으로 변경되지 않도록 처리
+    }
+  };
+
   return (
     <>
       <Map
         key={mapKey}
         center={coordinate.center}
         // style={{ width: "100%", height: "600px"}}
-        level={3}
+        level={mapLevel}
         ref={mapRef}
         onClick={(_target, mouseEvent) => mapClickEvent(_target, mouseEvent)}
+        onLoad={onMapLoad}
       >
         <ZoomControl />
         <MapTypeControl position={"TOPRIGHT"} />

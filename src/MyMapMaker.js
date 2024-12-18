@@ -3,6 +3,7 @@ import { Link} from "react-router-dom";
 import { MapMarker } from "react-kakao-maps-sdk";
 import moment from "moment";
 import icon from "./icon/location-icon.png";
+import icon2 from "./icon/location-icon2.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCamera, faPen } from "@fortawesome/free-solid-svg-icons";
 import axios from "./axios";
@@ -41,7 +42,7 @@ const MyMapMaker = ({position, title, date, ilocation, popPositions}) => {
       clickable={true} // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
       onClick={() => openInfo(ilocation)}
       image={{
-        src: icon, // 마커이미지
+        src: title === "등록하기" ? icon2 : icon, // 마커이미지
         size: {
           width: 38,
           height: 43,

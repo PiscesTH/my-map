@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "./axios";
+import { useNavigate } from "react-router-dom";
 
 // AuthContext 생성
 const AuthContext = createContext();
@@ -12,6 +13,7 @@ export function useAuth() {
 // AuthProvider 컴포넌트
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
@@ -29,7 +31,7 @@ export function AuthProvider({ children }) {
     await axios.post("/user/sign-out");
     sessionStorage.clear();
     setIsLoggedIn(false);
-    window.location.reload();
+    navigate("/");
   };
 
 /*   // 토큰 갱신 함수
