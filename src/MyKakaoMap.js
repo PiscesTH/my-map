@@ -6,11 +6,11 @@ import {
   MarkerClusterer,
 } from "react-kakao-maps-sdk";
 import axios from "./axios";
-import MyMapMaker from "./MyMapMaker";
+import MyMapMaker from "./MyMapMarker";
 import { useAppContext } from "./AppContext";
 
 function KakaoMap(props) {
-  const { coordinate, setCoordinate } = useAppContext();
+  const { coordinate, setCoordinate, openInfo } = useAppContext();
   const [mapKey, setMapKey] = useState(0);
   const [positionsOrigin, setPositionsOrigin] = useState([]);
   const [positions, setPositions] = useState([]);
@@ -35,8 +35,10 @@ function KakaoMap(props) {
         } else {
           const res = await axios.get("/location/dummy");
           const data = res.data.data;
-          setPositionsOrigin(data);
-          setPositions(data);
+          if (data) {
+            setPositionsOrigin(data);
+            setPositions(data);
+          }
         }
       } catch (err) {
         alert("서버에 문제가 발생했습니다. 페이지를 새로고침해주세요.");
@@ -87,17 +89,16 @@ function KakaoMap(props) {
     }
   };
 
-  const [isHide, setishide] = useState(true);
+  const [isHide, setishide] = useState(false);
   const hideMarker = () => {
-    if (isHide) {
+    setishide((prev) => !prev);
+    if (!isHide) {
       setPositions([]);
     } else {
       setPositions(positionsOrigin);
     }
-    setishide((prev) => !prev);
     setCenter();
     setMapKey((prev) => prev + 1);
-    console.log("visible value", isHide);
   };
 
   const mapClickEvent = (_target, mouseEvent) => {
@@ -105,10 +106,13 @@ function KakaoMap(props) {
     setPositions([
       ...positionsOrigin,
       {
+        ilocation: -1,
         title: "등록하기",
         latlng: { lat: latlng.getLat(), lng: latlng.getLng() },
       },
     ]);
+    openInfo(-1);
+    setishide(false);
     setCenter();
     setMapKey((prevKey) => prevKey + 1);
   };
@@ -166,7 +170,7 @@ function KakaoMap(props) {
           <button onClick={hideMarker}>기존 마커 숨기기</button>
           {sessionStorage.getItem("accessToken") && (
             <button id="getInfoBtn" onClick={changeCenter}>
-              지도 중앙 설정
+              현재 지도를 중심으로 설정
             </button>
           )}
         </div>

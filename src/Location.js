@@ -111,7 +111,7 @@ function Location(props) {
         <img
         key={index}
         data-pk={thumbnail.ipicture}
-        src={`http://localhost:8080/location/${ilocation}/${thumbnail.thumbnails}`}
+        src={`http://localhost:8080/images/location/${ilocation}/${thumbnail.thumbnails}`}
         alt={thumbnail.thumbnails}
         className="thumbnails"
         onClick={(event) => openImageModal(thumbnail, event)}
@@ -143,7 +143,7 @@ function Location(props) {
               <FontAwesomeIcon icon={faTrash} />
             </span>
             <img
-              src={`http://localhost:8080/location/${ilocation}/${selectedImage}`}
+              src={`http://localhost:8080/images/location/${ilocation}/${selectedImage}`}
               alt={selectedImage}
               className="image-modal__image"
             />

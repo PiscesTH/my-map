@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Calendar from "react-calendar";
-import moment from "moment";
 import { useLocation, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";

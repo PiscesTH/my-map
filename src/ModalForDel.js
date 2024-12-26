@@ -12,7 +12,7 @@ const ModalForDel = ({deleteFunction}) => {
           <button className="delete-modal__confirm" onClick={deleteFunction}>
             삭제
           </button>
-          <button className="delete-modal__cancel" onClick={() => closeModal()}>
+          <button className="delete-modal__cancel" onClick={closeModal}>
             취소
           </button>
         </div>
