@@ -132,9 +132,6 @@ const styles = {
     maxWidth: "400px",
     margin: "0 auto",
     padding: "20px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     textAlign: "center",
   },
   form: {
@@ -154,7 +151,7 @@ const styles = {
   },
   button: {
     padding: "10px 0",
-    backgroundColor: "#28a745",
+    backgroundColor: "#6698cb",
     color: "#fff",
     border: "none",
     borderRadius: "4px",
