@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true;
 // Axios 기본 설정
 const axiosInstance = axios.create({
   baseURL: "/api", // localtest url
-  // baseURL: "http://192.168.200.188:8080/api",
+  // baseURL: "http://localhost:5000/api",
   timeout: 10000, // 요청 타임아웃 설정(10초)
 });
 

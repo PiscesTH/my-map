@@ -5,8 +5,8 @@ import { useAuth } from "./AuthContext";
 
 function LoginPage() {
   // useState 훅을 사용하여 이메일과 비밀번호 상태를 관리합니다.
-  const [uid, setUid] = useState("");
-  const [password, setPassword] = useState("");
+  const [uid, setUid] = useState("xodus12");
+  const [password, setPassword] = useState("xptmxm12!@");
   const [error, setError] = useState("");
   const { login } = useAuth();
 
